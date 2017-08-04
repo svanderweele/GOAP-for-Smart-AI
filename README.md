@@ -1,5 +1,7 @@
 # GOAP for Smart AI
 
+This is a work-in-progress system.
+
 Useful links regarding GOAP<br>
 
 F.E.A.R's Git repo (contains GOAP implementation) <br>
