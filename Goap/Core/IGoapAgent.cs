@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Simon.Goap.Core
+namespace AI.Goap.Core
 {
     public interface IGoapAgent
     {
         string GetName();
 
-        void UpdateAgent();
+        void UpdateAgent(float delta);
 
         IGoapGoal GetCurrentGoal();
         IGoapMemory GetMemory();

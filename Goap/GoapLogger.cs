@@ -1,4 +1,4 @@
-﻿namespace Simon.Goap
+﻿namespace AI.Goap
 {
     public static class GoapLogger
     {

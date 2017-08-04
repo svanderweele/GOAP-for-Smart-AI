@@ -1,9 +1,8 @@
-﻿using Simon.Goap.Core;
+﻿using AI.Goap.Core;
 using System;
 using System.Collections.Generic;
-using IdleSiege.Systems.Goap;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public class GoapNode<T> : INode<GoapState>
     {
@@ -16,7 +15,6 @@ namespace Simon.Goap.Handler
 
         private float m_gCost;
         private float m_hCost;
-        private float m_cost;
 
         private List<INode<GoapState>> m_expandList;
 
@@ -44,8 +42,6 @@ namespace Simon.Goap.Handler
                 m_currentState = m_planner.GetAgent().GetMemory().GetWorldState().Clone();
             }
 
-
-            IGoapAction nextAction = (m_parent == null) ? null : m_parent.m_action;
 
             if (action != null)
             {
@@ -75,7 +71,6 @@ namespace Simon.Goap.Handler
             //Cost is equal to the amount of extra actions
             m_hCost = m_targetState.Count;
 
-            m_cost = m_gCost + m_hCost;
         }
 
         public float GetCost()

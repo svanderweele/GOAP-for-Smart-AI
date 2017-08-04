@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Simon.Goap.Core
+namespace AI.Goap.Core
 {
     public class GoapState
     {

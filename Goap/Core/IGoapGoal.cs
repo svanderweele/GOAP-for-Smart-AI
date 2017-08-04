@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Simon.Goap.Core
+namespace AI.Goap.Core
 {
     public interface IGoapGoal
     {

@@ -1,4 +1,4 @@
-﻿namespace Simon.Goap.Core
+﻿namespace AI.Goap.Core
 {
     public interface IGoapSensor
     {

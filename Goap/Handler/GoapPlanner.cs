@@ -1,15 +1,14 @@
-﻿using Simon.Goap.Core;
+﻿using AI.Goap.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public class GoapPlanner : IGoapPlanner
     {
         private IGoapAgent m_agent;
         private IGoapGoal m_currentGoal;
 
-        private bool m_Calculated = false;
         private AStar<GoapState> m_aStar;
 
         public GoapPlanner()
@@ -24,7 +23,6 @@ namespace Simon.Goap.Handler
         {
             m_agent = agent;
             m_currentGoal = null;
-            m_Calculated = false;
 
             List<IGoapGoal> possibleGoals = GetPossibleGoals(agent);
 

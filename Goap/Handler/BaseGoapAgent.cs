@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using Simon.Goap.Core;
-using IdleSiege.Systems.Goap;
+using AI.Goap.Core;
 using System;
-using IdleSiege.Utilities;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public abstract class BaseGoapAgent : IGoapAgent
     {
@@ -20,7 +18,6 @@ namespace Simon.Goap.Handler
 
         private float m_goalReAttemptTime = 1;
         private float m_currentGoalReAttemptTime = 0;
-        private bool m_CalculateGoalOnStart = true;
 
         public BaseGoapAgent(string agentName)
         {
@@ -131,17 +128,11 @@ namespace Simon.Goap.Handler
             }
         }
 
-        public virtual void UpdateAgent()
+        public virtual void UpdateAgent(float delta)
         {
-            if (m_CalculateGoalOnStart)
-            {
-                CalculateGoal();
-                m_CalculateGoalOnStart = false;
-            }
-
             UpdateInterruption();
             UpdateSensors();
-            UpdateGoals();
+            UpdateGoals(delta);
             UpdateCurrentAction();
         }
 
@@ -186,13 +177,13 @@ namespace Simon.Goap.Handler
             }
         }
 
-        private void UpdateGoals()
+        private void UpdateGoals(float delta)
         {
             if (m_currentGoal == null)
             {
                 if (m_currentGoalReAttemptTime < m_goalReAttemptTime)
                 {
-                    m_currentGoalReAttemptTime += TimeManager.GameplayTime.GetDeltaTime();
+                    m_currentGoalReAttemptTime += delta;
                 }
                 else
                 {

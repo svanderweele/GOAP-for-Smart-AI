@@ -1,7 +1,7 @@
 ﻿using System;
-using Simon.Goap.Core;
+using AI.Goap.Core;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public abstract class BaseGoapAction : IGoapAction
     {

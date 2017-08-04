@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Simon.Goap.Core;
+using AI.Goap.Core;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public abstract class BaseGoapGoal : IGoapGoal
     {

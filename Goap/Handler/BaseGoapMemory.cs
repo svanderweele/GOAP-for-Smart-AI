@@ -1,6 +1,6 @@
-﻿using Simon.Goap.Core;
+﻿using AI.Goap.Core;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public class BaseGoapMemory : IGoapMemory
     {

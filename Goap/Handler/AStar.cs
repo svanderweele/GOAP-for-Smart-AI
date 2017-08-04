@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Simon.Goap.Handler
+namespace AI.Goap.Handler
 {
     public class AStar<T>
     {

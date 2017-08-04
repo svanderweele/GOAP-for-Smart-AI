@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Simon.Goap.Core
+namespace AI.Goap.Core
 {
     public interface IGoapAction
     {
