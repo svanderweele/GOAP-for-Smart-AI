@@ -1,6 +1,4 @@
-using System;
 using AI.Goap.Handler;
-using Simon.Utilities.Generic;
 
 namespace AI.Goap
 {
@@ -23,6 +21,7 @@ namespace AI.Goap
         {
             m_goapPlanner = new GoapPlanner();
         }
+
 
     }
 }

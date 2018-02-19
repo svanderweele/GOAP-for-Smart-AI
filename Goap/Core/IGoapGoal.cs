@@ -8,6 +8,7 @@ namespace AI.Goap.Core
         void OnBegan();
         void OnFinish();
         void OnInterrupted();
+        void OnFailed();
         void Run();
         bool CanRun(IGoapAgent agent);
         // bool ValidateGoal(IGoapAgent agent);

@@ -13,7 +13,7 @@
 
 
 
-        private static DebugMode m_debugMode = DebugMode.ERRORS;
+        private static DebugMode m_debugMode = DebugMode.WARNINGS;
 
         public static void Log(string log)
         {

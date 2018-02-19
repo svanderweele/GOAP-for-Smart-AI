@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using AI.Goap.Core;
 using System;
+using UnityEngine;
 
 namespace AI.Goap.Handler
 {
     public abstract class BaseGoapAgent : IGoapAgent
     {
-
         private string m_agentName;
         protected BaseGoapMemory m_agentMemory;
         protected List<IGoapSensor> m_agentSensors;
@@ -18,15 +18,19 @@ namespace AI.Goap.Handler
 
         private float m_goalReAttemptTime = 1;
         private float m_currentGoalReAttemptTime = 0;
+        private bool m_isDisabled = false;
 
-        public BaseGoapAgent(string agentName)
+        public BaseGoapAgent()
         {
-            m_agentName = agentName;
-
             m_agentGoals = new List<IGoapGoal>();
             m_agentActions = new List<IGoapAction>();
             m_agentMemory = new BaseGoapMemory();
             m_agentSensors = new List<IGoapSensor>();
+        }
+
+        public void Init(string name)
+        {
+            m_agentName = name;
         }
 
         private void CancelGoal()
@@ -40,11 +44,10 @@ namespace AI.Goap.Handler
             CalculateGoal();
         }
 
-        public void CalculateGoal()
+        private void CalculateGoal()
         {
             m_currentGoalReAttemptTime = 0;
             m_currentGoal = GoapPlannerManager.s_Instance.GetPlanner().Plan(this);
-
             if (m_currentGoal == null)
             {
                 OnCalculateGoalFailed();
@@ -53,7 +56,6 @@ namespace AI.Goap.Handler
 
             m_currentGoal.OnBegan();
             m_currentGoal.Run();
-            RunNextAction();
         }
 
 
@@ -72,10 +74,23 @@ namespace AI.Goap.Handler
             if (m_currentGoal != null)
             {
                 m_currentGoal.OnInterrupted();
+                m_currentGoal = null;
             }
 
             InterruptCurrentAction();
-            FinishCurrentGoal();
+        }
+        
+        
+        private void FailCurrentGoal()
+        {
+            GoapLogger.LogWarning("BaseGoapAgent :: Goal Failed " + m_currentGoal.GetName());
+            if (m_currentGoal != null)
+            {
+                m_currentGoal.OnFailed();
+                m_currentGoal = null;
+            }
+
+            InterruptCurrentAction();
         }
 
         private void FinishCurrentGoal()
@@ -92,9 +107,8 @@ namespace AI.Goap.Handler
             if (m_currentAction != null)
             {
                 m_currentAction.OnInterrupted();
+                m_currentAction = null;
             }
-
-            FinishCurrentAction();
         }
 
         private void FinishCurrentAction()
@@ -106,15 +120,10 @@ namespace AI.Goap.Handler
             }
         }
 
-        private void CompleteCurrentAction()
+        protected void RunNextAction()
         {
-            FinishCurrentAction();
-        }
-
-        private void RunNextAction()
-        {
-            Queue<IGoapAction> goalActions = m_currentGoal.GetPlan();
-
+            if (m_currentGoal == null || m_currentAction != null) return;
+            var goalActions = m_currentGoal.GetPlan();
             if (goalActions.Count > 0)
             {
                 IGoapAction nextAction = goalActions.Dequeue();
@@ -130,14 +139,16 @@ namespace AI.Goap.Handler
 
         public virtual void UpdateAgent(float delta)
         {
+            if (m_isDisabled) return;
             UpdateInterruption();
             UpdateSensors();
             UpdateGoals(delta);
-            UpdateCurrentAction();
         }
 
         private void UpdateSensors()
         {
+            if (m_isDisabled) return;
+
             foreach (IGoapSensor sensor in m_agentSensors)
             {
                 sensor.UpdateSensor(m_agentMemory);
@@ -165,7 +176,8 @@ namespace AI.Goap.Handler
                                 }
 
 
-                                GoapLogger.LogWarning("BaseGoapAgent :: " + goal.GetName() + " interrupted goal " + m_currentGoal.GetName());
+                                GoapLogger.LogWarning("BaseGoapAgent :: " + goal.GetName() + " interrupted goal " +
+                                                      m_currentGoal.GetName());
 
                                 RecalculateGoal();
 
@@ -202,23 +214,24 @@ namespace AI.Goap.Handler
                 // }
 
                 IGoapAction[] currentActions = m_currentGoal.GetPlan().ToArray();
-
                 //Check if actions are still valid
                 for (int i = 0; i < currentActions.Length; i++)
                 {
                     if (currentActions[i].ValidateAction() == false)
                     {
-                        GoapLogger.LogWarning("BaseGoapAgent :: Current action validation failed! > " + currentActions[i].GetName() + " info: " + currentActions[i].GetValidationReason());
-                        RecalculateGoal();
+                        GoapLogger.LogWarning("BaseGoapAgent :: Current action validation failed! > " +
+                                              currentActions[i].GetName() + " info: " +
+                                              currentActions[i].GetValidationReason());
+                        FailCurrentGoal();
                         return;
                     }
                 }
-
             }
         }
 
-        private void UpdateCurrentAction()
+        public void UpdateCurrentAction()
         {
+            if (m_isDisabled) return;
             if (m_currentAction != null)
             {
                 m_currentAction.OnRun(m_currentGoal.GetGoalState(this));
@@ -228,16 +241,15 @@ namespace AI.Goap.Handler
         private void OnActionCompleted(object sender, EventArgs args)
         {
             GoapLogger.Log("BaseGoapAgent :: Action Complete (" + m_currentAction.GetName() + " )");
-            CompleteCurrentAction();
-            RunNextAction();
+            FinishCurrentAction();
         }
 
         private void OnActionFailed(object sender, EventArgs args)
         {
             GoapLogger.Log("BaseGoapAgent :: Action Failed (" + m_currentAction.GetName() + " )");
+            InterruptCurrentAction();
             RecalculateGoal();
         }
-
 
 
         private void OnGoalCompleted()
@@ -285,12 +297,28 @@ namespace AI.Goap.Handler
             return m_agentSensors;
         }
 
+        public void EnableAgent()
+        {
+            m_isDisabled = false;
+        }
+
+        public void DisableAgent()
+        {
+            m_isDisabled = true;
+            InterruptCurrentGoal();
+        }
+
 
         public void AddAction(IGoapAction newAction)
         {
             m_agentActions.Add(newAction);
             newAction.m_OnComplete += OnActionCompleted;
             newAction.m_OnFailed += OnActionFailed;
+        }
+
+        public void AddGoal(IGoapGoal goal)
+        {
+            m_agentGoals.Add(goal);
         }
 
 
@@ -302,7 +330,7 @@ namespace AI.Goap.Handler
 
         private void RemoveEvents()
         {
-            foreach(IGoapAction action in m_agentActions)
+            foreach (IGoapAction action in m_agentActions)
             {
                 action.m_OnComplete -= OnActionCompleted;
                 action.m_OnFailed -= OnActionFailed;

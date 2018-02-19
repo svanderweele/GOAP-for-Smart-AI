@@ -86,8 +86,8 @@ namespace AI.Goap.Handler
                 if (CanRunAction(agent, action) == false)
                 {
                     continue;
-                }
-
+                }    
+                    
                 goalState.RemoveCompletedConditions(action.GetContextPostEffects(goalState)); ;
             }
 
@@ -151,7 +151,6 @@ namespace AI.Goap.Handler
             {
                 return false;
             }
-
             return true;
         }
 

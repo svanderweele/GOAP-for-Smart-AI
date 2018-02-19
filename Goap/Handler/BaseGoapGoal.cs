@@ -12,6 +12,7 @@ namespace AI.Goap.Handler
         public virtual void OnFinish() { }
         public virtual void OnInterrupted() { }
         public virtual void Run() { }
+        public virtual void OnFailed() { }
 
         public string GetValidationReason() { return m_debug_validationReason; }
 
@@ -21,11 +22,25 @@ namespace AI.Goap.Handler
         protected GoapState m_goalState;
         private Queue<IGoapAction> m_goalPlan;
 
-        public BaseGoapGoal(string goalName, int goalPriority)
+        public BaseGoapGoal()
         {
-            m_goalName = goalName;
-            m_goalPriority = goalPriority;
             m_goalState = GoapState.Instantiate();
+        }
+
+        public void Init(string name, int priority)
+        {
+            SetName(name);
+            SetPriority(priority);
+        }
+
+        protected void SetName(string name)
+        {
+            m_goalName = name;
+        }
+
+        protected void SetPriority(int priority)
+        {
+            m_goalPriority = priority;
         }
 
         public virtual GoapState GetGoalState(IGoapAgent agent)
