@@ -1,8 +1,7 @@
-﻿using AI.Goap.Core;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Libraries.btcp.Goap.src.Core;
 
-namespace AI.Goap.Handler
+namespace Libraries.btcp.Goap.src.Handler
 {
     public class GoapNode<T> : INode<GoapState>
     {

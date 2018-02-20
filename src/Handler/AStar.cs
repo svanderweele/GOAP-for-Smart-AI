@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
-namespace AI.Goap.Handler
+namespace Libraries.btcp.Goap.src.Handler
 {
     public class AStar<T>
     {

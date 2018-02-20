@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using AI.Goap.Core;
+using Libraries.btcp.Goap.src.Core;
 
-namespace AI.Goap.Handler
+namespace Libraries.btcp.Goap.src.Handler
 {
     public abstract class BaseGoapGoal : IGoapGoal
     {

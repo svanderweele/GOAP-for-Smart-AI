@@ -1,4 +1,4 @@
-﻿namespace AI.Goap.Core
+﻿namespace Libraries.btcp.Goap.src.Core
 {
     public interface IGoapSensor
     {

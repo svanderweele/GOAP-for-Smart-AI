@@ -1,6 +1,6 @@
-using AI.Goap.Handler;
+using Libraries.btcp.Goap.src.Handler;
 
-namespace AI.Goap
+namespace Libraries.btcp.Goap.src
 {
     public class GoapPlannerManager
     {

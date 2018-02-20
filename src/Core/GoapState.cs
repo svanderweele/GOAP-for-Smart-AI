@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace AI.Goap.Core
+namespace Libraries.btcp.Goap.src.Core
 {
     public class GoapState
     {

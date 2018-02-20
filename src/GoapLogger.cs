@@ -1,4 +1,4 @@
-﻿namespace AI.Goap
+﻿namespace Libraries.btcp.Goap.src
 {
     public static class GoapLogger
     {

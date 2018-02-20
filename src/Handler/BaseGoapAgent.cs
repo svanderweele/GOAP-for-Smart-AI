@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using AI.Goap.Core;
-using System;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using Libraries.btcp.Goap.src.Core;
 
-namespace AI.Goap.Handler
+namespace Libraries.btcp.Goap.src.Handler
 {
     public abstract class BaseGoapAgent : IGoapAgent
     {
